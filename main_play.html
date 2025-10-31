@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Four keys Rhythm</title>
+    <link rel="icon" href="./icon/simple.ico" >
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #282828;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        .h3head {
+            color: rgb(50, 161, 178);
+        }
+
+        #game-container {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
+
+        #song-selection {
+            text-align: center;
+            padding: 5%;
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #song-selection h1 {
+            margin-bottom: 3%;
+            font-size: 2.5vw;
+            width: 100%;
+            text-align: center;
+        }
+
+        .song-buttons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2%;
+            width: 70%;
+            margin: 0 auto;
+        }
+
+        .song-button {
+            flex: 1 1 45%;
+            min-width: 200px;
+            padding: 2%;
+            margin: 1%;
+            background: rgba(68, 68, 68, 0.8);
+            color: white;
+            border: none;
+            border-radius: 0.5%;
+            font-size: 1.2vw;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+
+        .song-button:hover {
+            background: rgba(102, 102, 102, 0.8);
+        }
+
+        .import-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2%;
+            width: 70%;
+            margin: 2% auto;
+        }
+
+        .import-button {
+            flex: 1 1 45%;
+            min-width: 200px;
+            padding: 2%;
+            margin: 1%;
+            background: rgba(52, 152, 219, 0.8);
+            color: white;
+            border: none;
+            border-radius: 0.5%;
+            font-size: 1.2vw;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+
+        .import-button:hover {
+            background: rgba(41, 128, 185, 0.8);
+        }
+
+        #settings-button {
+            display: block;
+            width: 30%;
+            padding: 1.5%;
+            margin: 1% auto;
+            background: rgba(155, 89, 182, 0.8);
+            color: white;
+            border: none;
+            border-radius: 0.5%;
+            font-size: 1.2vw;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+
+        #settings-button:hover {
+            background: rgba(142, 68, 173, 0.8);
+        }
+
+        #result-screen {
+            display: none;
+            text-align: center;
+            padding: 5%;
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #result-screen h1 {
+            margin-bottom: 3%;
+            font-size: 2.5vw;
+        }
+
+        .result-stats {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1%;
+            margin-bottom: 2%;
+        }
+
+        .result-stat {
+            font-size: 1.5vw;
+            margin: 0.5% 0;
+        }
+
+        #restart-button {
+            margin-top: 3%;
+            padding: 1.5% 3%;
+            background: rgba(68, 68, 68, 0.8);
+            color: white;
+            border: none;
+            border-radius: 0.5%;
+            font-size: 1.2vw;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+
+        #restart-button:hover {
+            background: rgba(102, 102, 102, 0.8);
+        }
+
+        .line_border1 {
+            position: fixed;
+            top: 0;
+            left: 36%;
+            transform: translateX(-50%);
+            width: 0.2%;
+            height: 100vh;
+            background: #ffffff;
+            z-index: -1;
+        }
+
+        .line_border2 {
+            position: fixed;
+            top: 0;
+            left: 43%;
+            transform: translateX(-50%);
+            width: 0.2%;
+            height: 100vh;
+            background: #7f7f7f;
+            z-index: -1;
+        }
+
+        .line_border3 {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0.2%;
+            height: 100vh;
+            background: #ffffff;
+            z-index: -1;
+        }
+
+        .line_border4 {
+            position: fixed;
+            top: 0;
+            left: 57%;
+            transform: translateX(-50%);
+            width: 0.2%;
+            height: 100vh;
+            background: #7f7f7f;
+            z-index: -1;
+        }
+
+        .line_border5 {
+            position: fixed;
+            top: 0;
+            left: 64%;
+            transform: translateX(-50%);
+            width: 0.2%;
+            height: 100vh;
+            background: #ffffff;
+            z-index: -1;
+        }
+
+        .bottom_judging_line {
+            position: fixed;
+            top: 85%;
+            left: 36%;
+            width: 28%;
+            height: 0.3%;
+            background: #ffffff;
+            transform: translateY(-50%);
+        }
+
+        .key1 {
+            position: fixed;
+            top: 0%;
+            left: 36.08%;
+            width: 6.84%;
+            height: 85%;
+            background: rgba(36, 36, 36, 0.5);
+        }
+
+        .key2 {
+            position: fixed;
+            top: 0%;
+            left: 43.06%;
+            width: 6.87%;
+            height: 85%;
+            background: rgba(36, 36, 36, 0.5);
+        }
+
+        .key3 {
+            position: fixed;
+            top: 0%;
+            left: 50.06%;
+            width: 6.87%;
+            height: 85%;
+            background: rgba(36, 36, 36, 0.5);
+        }
+
+        .key4 {
+            position: fixed;
+            top: 0%;
+            left: 57.05%;
+            width: 6.87%;
+            height: 85%;
+            background: rgba(36, 36, 36, 0.5);
+        }
+
+        .key1_bottom {
+            position: fixed;
+            top: 85.2%;
+            left: 36.08%;
+            width: 6.87%;
+            height: 15%;
+            background: rgba(36, 36, 36, 0.7);
+        }
+
+        .key2_bottom {
+            position: fixed;
+            top: 85.2%;
+            left: 43.06%;
+            width: 6.87%;
+            height: 15%;
+            background: rgba(36, 36, 36, 0.7);
+        }
+
+        .key3_bottom {
+            position: fixed;
+            top: 85.2%;
+            left: 50.06%;
+            width: 6.87%;
+            height: 15%;
+            background: rgba(36, 36, 36, 0.7);
+        }
+
+        .key4_bottom {
+            position: fixed;
+            top: 85.2%;
+            left: 57.05%;
+            width: 6.87%;
+            height: 15%;
+            background: rgba(36, 36, 36, 0.7);
+        }
+
+        @keyframes note_fall {
+            from {
+                top: calc(0% - 5%);
+            }
+
+            to {
+                top: calc(100% + 5%);
+            }
+        }
+
+        .fall_note1 {
+            position: fixed;
+            background-color: cadetblue;
+            width: 6.85%;
+            height: 3%;
+            border-radius: 10%;
+            top: -5%;
+            left: 36.08%;
+            animation: note_fall 0.8s linear;
+        }
+
+        .fall_note2 {
+            position: fixed;
+            background-color: cadetblue;
+            width: 6.85%;
+            height: 3%;
+            border-radius: 10%;
+            top: -5%;
+            left: 43.06%;
+            animation: note_fall 0.8s linear;
+        }
+
+        .fall_note3 {
+            position: fixed;
+            background-color: pink;
+            width: 6.86%;
+            height: 3%;
+            border-radius: 10%;
+            top: -5%;
+            left: 50.06%;
+            animation: note_fall 0.8s linear;
+        }
+
+        .fall_note4 {
+            position: fixed;
+            background-color: pink;
+            width: 6.85%;
+            height: 3%;
+            border-radius: 10%;
+            top: -5%;
+            left: 57.05%;
+            animation: note_fall 0.8s linear;
+        }
+
+        /* 命名灵感来源于vivid/stasis */
+        .bumper1 {
+            position: fixed;
+            background-color: blue;
+            width: 13.7%;
+            height: 3%;
+            border-radius: 10%;
+            top: -5%;
+            left: 36.08%;
+            animation: note_fall 0.8s linear;
+        }
+
+        .bumper2 {
+            position: fixed;
+            background-color: purple;
+            width: 13.7%;
+            height: 3%;
+            border-radius: 10%;
+            top: -5%;
+            left: 43.06%;
+            animation: note_fall 0.8s linear;
+        }
+
+        .bumper3 {
+            position: fixed;
+            background-color: red;
+            width: 13.7%;
+            height: 3%;
+            border-radius: 10%;
+            top: -5%;
+            left: 50.06%;
+            animation: note_fall 0.8s linear;
+        }
+
+        /* Long音符样式，无法使用，不建议使用该音符 */
+        .long_note1 {
+            position: fixed;
+            background-color: cadetblue;
+            width: 6.85%;
+            border-radius: 10%;
+            top: -5%;
+            left: 36.08%;
+            animation: note_fall 0.8s linear;
+        }
+
+        .long_note2 {
+            position: fixed;
+            background-color: cadetblue;
+            width: 6.85%;
+            border-radius: 10%;
+            top: -5%;
+            left: 43.06%;
+            animation: note_fall 0.8s linear;
+        }
+
+        .long_note3 {
+            position: fixed;
+            background-color: pink;
+            width: 6.86%;
+            border-radius: 10%;
+            top: -5%;
+            left: 50.06%;
+            animation: note_fall 0.8s linear;
+        }
+
+        .long_note4 {
+            position: fixed;
+            background-color: pink;
+            width: 6.85%;
+            border-radius: 10%;
+            top: -5%;
+            left: 57.05%;
+            animation: note_fall 0.8s linear;
+        }
+
+        .combo_show {
+            width: 20%;
+            height: 5%;
+            position: fixed;
+            top: 2%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            line-height: 500%;
+            font-size: 1.5vw;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 0.5% rgba(255, 255, 255, 0.8);
+        }
+
+        .judgment-text {
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3vw;
+            font-weight: bold;
+            text-shadow: 0 0 1% rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            animation: fadeOut 1s forwards;
+            z-index: 100;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* 判定统计 */
+        .judge-stats {
+            position: fixed;
+            bottom: 10%;
+            left: 2%;
+            width: 20%;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1%;
+            border-radius: 1%;
+            font-size: 1vw;
+        }
+
+        .judge-stat {
+            margin: 0.5% 0;
+        }
+
+        /* 按键反馈效果 */
+        .key-hit-effect {
+            position: fixed;
+            height: 5%;
+            border-radius: 10%;
+            opacity: 0.7;
+            animation: keyHit 0.3s forwards;
+        }
+
+        @keyframes keyHit {
+            0% {
+                opacity: 0.7;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1.2);
+            }
+        }
+
+        /* 音符击中效果 */
+        .note-hit-effect {
+            position: fixed;
+            width: 6%;
+            height: 4%;
+            border: 0.3% solid gold;
+            box-sizing: border-box;
+            animation: noteHit 0.5s forwards;
+        }
+
+        @keyframes noteHit {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* 隐藏文件输入框 */
+        .file-input {
+            display: none;
+        }
+
+        /* 判定文字颜色 */
+        .a-perfect {
+            color: gold;
+
+        }
+
+        .perfect {
+            color: gold;
+
+        }
+
+        .great {
+            color: green;
+
+        }
+
+        .good {
+            color: blue;
+
+        }
+
+        .miss {
+            color: #F44336;
+
+        }
+
+        #settings-screen {
+            display: none;
+            text-align: center;
+            padding: 5%;
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .settings-container {
+            width: 80%;
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2%;
+            border-radius: 1%;
+            backdrop-filter: blur(10px);
+        }
+
+        .settings-title {
+            font-size: 2vw;
+            margin-bottom: 2%;
+        }
+
+        .setting-group {
+            text-align: left;
+            margin: 2% 0;
+        }
+
+        .setting-label {
+            display: block;
+            margin-bottom: 1%;
+            font-size: 1.2vw;
+        }
+
+        .setting-input {
+            width: 100%;
+            padding: 1%;
+            margin: 1% 0;
+            border-radius: 0.5%;
+            border: none;
+        }
+
+        /* 判定文字显示区域 */
+        .judge-text-display {
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2vw;
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .judge-text-display .a-perfect {
+            color: gold;
+        }
+
+        .judge-text-display .perfect {
+            color: gold;
+        }
+
+        .judge-text-display .great {
+            color: green;
+        }
+
+        .judge-text-display .good {
+            color: blue;
+        }
+
+        .judge-text-display .miss {
+            color: #F44336;
+        }
+
+        /* 打击误差显示，已弃用 */
+        /* .hit-delta-display {
+            position: fixed;
+            bottom: 10%;
+            right: 2%;
+            width: 20%;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1%;
+            border-radius: 1%;
+            font-size: 1.2vw;
+            text-align: center;
+        } */
+
+        .hit-delta-value {
+            font-size: 1.5vw;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        /* 震动动画 */
+        @keyframes shake {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(5px, 5px);
+            }
+
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        .shake-effect {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        .settings-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 2%;
+            margin-top: 3%;
+        }
+
+        .settings-button {
+            flex: 1 1 30%;
+            min-width: 120px;
+            padding: 2%;
+            margin: 1%;
+            background: rgba(68, 68, 68, 0.8);
+            color: white;
+            border: none;
+            border-radius: 0.5%;
+            font-size: 1.2vw;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+
+        .settings-button:hover {
+            background: rgba(102, 102, 102, 0.8);
+        }
+
+        /* 返回主菜单 */
+        #back-to-menu-button {
+            position: fixed;
+            top: 2%;
+            left: 2%;
+            padding: 1%;
+            background: rgba(68, 68, 68, 0.8);
+            color: white;
+            border: none;
+            border-radius: 0.5%;
+            font-size: 1vw;
+            cursor: pointer;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        #back-to-menu-button:hover {
+            background: rgba(102, 102, 102, 0.8);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 歌曲选择界面 -->
+    <div id="song-selection">
+        <h1>Four Keys Rhythm</h1>
+        <h1>选择歌曲</h1>
+        <div class="song-buttons-container">
+            <button class="song-button" data-song="song1">1</button>
+            <button class="song-button" data-song="song2">2</button>
+
+        </div>
+        <div class="import-buttons">
+            <button onclick="window.location.href='make.html'" class="import-button" class="import-button"
+                id="import-song-button">生成谱面json</button>
+            <button class="import-button" id="import-chart-button">导入谱面</button>
+        </div>
+        <button id="settings-button">设置</button>
+        <input type="file" id="song-file-input" class="file-input" accept="audio/*">
+        <input type="file" id="chart-file-input" class="file-input" accept=".json">
+    </div>
+
+    <!-- 设置界面 -->
+    <div id="settings-screen">
+        <div class="settings-container">
+            <h2 class="settings-title">游戏设置</h2>
+
+            <div class="setting-group">
+                <label class="setting-label">歌曲选择界面背景图片:</label>
+                <input type="file" id="song-bg-input" class="setting-input" accept="image/*">
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">游戏界面背景图片:</label>
+                <input type="file" id="game-bg-input" class="setting-input" accept="image/*">
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">结果界面背景图片:</label>
+                <input type="file" id="result-bg-input" class="setting-input" accept="image/*">
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">
+                    <input type="checkbox" id="show-combo" checked> 显示Combo
+                </label>
+            </div>
+
+            <!-- <div class="setting-group">
+                <label class="setting-label">
+                    <input type="checkbox" id="show-judgment" checked> 显示判定文字
+                </label>
+            </div> -->
+
+            <div class="setting-group">
+                <label class="setting-label">
+                    <input type="checkbox" id="show-judgment-text" checked> 显示判定文字
+                </label>
+            </div>
+
+            <!-- <div class="setting-group">
+                <label class="setting-label">
+                    <input type="checkbox" id="show-judgment-shake" checked> 启用震动特效
+                </label>
+            </div> -->
+
+            <div class="setting-group">
+                <label class="setting-label">Fall音符1颜色:</label>
+                <input type="color" id="fall1-color" class="setting-input" value="#5f9ea0">
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">Fall音符2颜色:</label>
+                <input type="color" id="fall2-color" class="setting-input" value="#5f9ea0">
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">Fall音符3颜色:</label>
+                <input type="color" id="fall3-color" class="setting-input" value="#ffc0cb">
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">Fall音符4颜色:</label>
+                <input type="color" id="fall4-color" class="setting-input" value="#ffc0cb">
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">Bumper音符颜色:</label>
+                <input type="color" id="bumper-color" class="setting-input" value="#0000ff">
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">Long音符颜色:</label>
+                <input type="color" id="long-color" class="setting-input" value="#5f9ea0">
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">音符圆角(%):</label>
+                <input type="number" id="note-border-radius" class="setting-input" min="0" max="50" value="10">
+            </div>
+
+            <div class="setting-group">
+                <label class="setting-label">判定线颜色:</label>
+                <input type="color" id="line-color" class="setting-input" value="#ffffff">
+            </div>
+
+            <div class="settings-buttons">
+                <button class="settings-button" id="save-settings">保存设置</button>
+                <button class="settings-button" id="reset-settings">恢复默认</button>
+                <button class="settings-button" id="back-to-menu">返回菜单</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 游戏主界面 -->
+    <div id="game-container">
+        <button id="back-to-menu-button">返回主菜单</button>
+        <div class="line_border1">
+        </div>
+        <div class="line_border2">
+        </div>
+        <div class="line_border3">
+        </div>
+        <div class="line_border4">
+        </div>
+        <div class="line_border5">
+        </div>
+        <div class="bottom_judging_line">
+        </div>
+        <div class="left_note">
+        </div>
+        <div class="key1">
+        </div>
+        <div class="key2">
+        </div>
+        <div class="key3">
+        </div>
+        <div class="key4">
+        </div>
+        <div class="key1_bottom">
+        </div>
+        <div class="key2_bottom">
+        </div>
+        <div class="key3_bottom">
+        </div>
+        <div class="key4_bottom">
+        </div>
+        <div id="notes_container"></div>
+        <div class="combo_show" id="combo_display">
+            COMBO: 0
+        </div>
+        <div id="judgment-container"></div>
+        <div class="judge-stats" id="judge-stats">
+            <div class="judge-stat a-perfect">A-PERFECT: <span id="a-perfect-count">0</span></div>
+            <div class="judge-stat perfect">PERFECT: <span id="perfect-count">0</span></div>
+            <div class="judge-stat great">GREAT: <span id="great-count">0</span></div>
+            <div class="judge-stat good">GOOD: <span id="good-count">0</span></div>
+            <div class="judge-stat miss">MISS: <span id="miss-count-stat">0</span></div>
+        </div>
+        <div class="judge-text-display" id="judge-text-display"></div>
+    </div>
+
+
+    <div id="result-screen">
+        <h1>游戏结束</h1>
+        <div class="result-stats">
+            <div class="result-stat">最终得分: <span id="final-score">0</span></div>
+            <div class="result-stat">最高连击: <span id="max-combo">0</span></div>
+            <div class="result-stat">A-PERFECT: <span id="result-a-perfect">0</span></div>
+            <div class="result-stat">PERFECT: <span id="result-perfect">0</span></div>
+            <div class="result-stat">GREAT: <span id="result-great">0</span></div>
+            <div class="result-stat">GOOD: <span id="result-good">0</span></div>
+            <div class="result-stat">MISS: <span id="result-miss">0</span></div>
+        </div>
+        <button id="restart-button">返回主菜单</button>
+    </div>
+</body>
+<script>
+    // 游戏状态
+    let gameState = {
+        combo: 0,
+        maxCombo: 0,
+        score: 0,
+        missCount: 0,
+        isPlaying: false,
+        currentSong: null,
+        notes: [], // 存储当前活动音符
+        songData: {}, // 存储歌曲数据
+        activeKeys: new Set(), // 当前按下的键
+        longNotes: new Map(), // 正在按住的长音符（弃用）
+        lastHitTime: 0, // 上次击中时间，用于防止重复判定
+        customSongs: {}, // 自定义歌曲
+        customCharts: {}, // 自定义谱面
+        // 判定统计
+        judgeStats: {
+            aPerfect: 0,
+            perfect: 0,
+            great: 0,
+            good: 0,
+            miss: 0
+        },
+        // 游戏设置
+        settings: {
+            showCombo: true,
+            showJudgment: true,
+            showJudgmentText: true,
+            showJudgmentShake: false, // 关闭震动特效（弃用）
+            backgrounds: {
+                songSelect: '',
+                game: '',
+                result: ''
+            }
+        }
+    };
+
+    // 判定等级和分数
+    const JUDGE_LEVELS = {
+        A_PERFECT: { range: 30, score: 10100, text: "A-PERFECT", color: "gold" },   
+        PERFECT: { range: 60, score: 10000, text: "PERFECT", color: "gold" },        
+        GREAT: { range: 90, score: 8000, text: "GREAT", color: "green" },             
+        GOOD: { range: 160, score: 5000, text: "GOOD", color: "blue" },              
+        MISS: { range: 200, score: 0, text: "MISS", color: "red" }                  
+    };
+
+    // 歌曲示例
+    const songDatabase = {
+        song1: null,
+        song2: null,
+        song3: null,
+        test: null,
+        test2: null,
+        test3: null
+    };
+
+    // 初始化数据库
+    async function initSongDatabase() {
+        try {
+            const song1Response = await fetch('json/song1.json');
+            songDatabase.song1 = await song1Response.json();
+            document.querySelector('.song-button[data-song="song1"]').textContent =
+                songDatabase.song1.name || "Song 1";
+
+            const song2Response = await fetch('json/song2.json');
+            songDatabase.song2 = await song2Response.json();
+            document.querySelector('.song-button[data-song="song2"]').textContent =
+                songDatabase.song2.name || "Song 2";
+
+            const song3Response = await fetch('json/song3.json');
+            songDatabase.song3 = await song3Response.json();
+            document.querySelector('.song-button[data-song="song3"]').textContent =
+                songDatabase.song3.name || "Song 3";
+
+            const testResponse = await fetch('json/test.json');
+            songDatabase.test = await testResponse.json();
+            document.querySelector('.song-button[data-song="test"]').textContent =
+                songDatabase.test.name || "测试歌曲(含Bumper和Long音符)";
+
+            const test2Response = await fetch('json/test2.json');
+            songDatabase.test2 = await test2Response.json();
+            document.querySelector('.song-button[data-song="test2"]').textContent =
+                songDatabase.test2.name || "测试歌曲2(更多Bumper和Long音符)";
+
+            const test3Response = await fetch('json/test3.json');
+            songDatabase.test3 = await test3Response.json();
+            document.querySelector('.song-button[data-song="test3"]').textContent =
+                songDatabase.test3.name || "测试歌曲3";
+        } catch (error) {
+            console.error('加载歌曲数据失败:', error);
+        }
+    }
+
+    initSongDatabase();
+
+    const songSelectionScreen = document.getElementById('song-selection');
+    const gameContainer = document.getElementById('game-container');
+    const resultScreen = document.getElementById('result-screen');
+    const settingsScreen = document.getElementById('settings-screen');
+    const comboDisplay = document.getElementById('combo_display');
+    const judgmentContainer = document.getElementById('judgment-container');
+    const judgeStats = document.getElementById('judge-stats');
+    const songFileInput = document.getElementById('song-file-input');
+    const chartFileInput = document.getElementById('chart-file-input');
+
+    const settingsButton = document.getElementById('settings-button');
+    const saveSettingsButton = document.getElementById('save-settings');
+    const resetSettingsButton = document.getElementById('reset-settings');
+    const backToMenuButton = document.getElementById('back-to-menu');
+
+    // 背景图片
+    const songBgInput = document.getElementById('song-bg-input');
+    const gameBgInput = document.getElementById('game-bg-input');
+    const resultBgInput = document.getElementById('result-bg-input');
+
+    // 音频
+    let audioElement = null;
+
+
+    document.querySelectorAll('.song-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const songKey = button.dataset.song;
+            startGame(songKey);
+        });
+    });
+
+    // 已弃用单独加载歌曲
+    //document.getElementById('import-song-button').addEventListener('click', () => {
+    // songFileInput.click();
+    //});
+
+    document.getElementById('import-chart-button').addEventListener('click', () => {
+        chartFileInput.click();
+    });
+
+    settingsButton.addEventListener('click', () => {
+        songSelectionScreen.style.display = 'none';
+        settingsScreen.style.display = 'flex';
+    });
+
+    saveSettingsButton.addEventListener('click', saveSettings);
+    resetSettingsButton.addEventListener('click', resetSettings);
+    backToMenuButton.addEventListener('click', () => {
+        settingsScreen.style.display = 'none';
+        songSelectionScreen.style.display = 'flex';
+    });
+
+    document.getElementById('back-to-menu-button').addEventListener('click', () => {
+
+        if (audioElement) {
+            audioElement.pause();
+            audioElement = null;
+        }
+
+        gameState.isPlaying = false;
+
+        document.getElementById('notes_container').innerHTML = '';
+
+        gameContainer.style.display = 'none';
+        songSelectionScreen.style.display = 'flex';
+    });
+
+    // 处理背景图片导入
+    songBgInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const url = URL.createObjectURL(file);
+            gameState.settings.backgrounds.songSelect = url;
+            songSelectionScreen.style.backgroundImage = `url(${url})`;
+        }
+    });
+
+    gameBgInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const url = URL.createObjectURL(file);
+            gameState.settings.backgrounds.game = url;
+            gameContainer.style.backgroundImage = `url(${url})`;
+        }
+    });
+
+    resultBgInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const url = URL.createObjectURL(file);
+            gameState.settings.backgrounds.result = url;
+            resultScreen.style.backgroundImage = `url(${url})`;
+        }
+    });
+
+    // 处理歌曲文件导入（弃用）
+    // songFileInput.addEventListener('change', (event) => {
+    //     const file = event.target.files[0];
+    //     if (file) {
+
+    //         alert("请导入包含歌曲信息的JSON文件");
+    //         event.target.value = ''; 
+    //     }
+    // });
+
+    // 谱面文件导入
+    chartFileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const chartData = JSON.parse(e.target.result);
+
+                    // 为自定义歌曲生成唯一键名
+                    const songKey = 'custom_' + Date.now();
+
+                    // 检查是否有嵌入的音频数据 (Base64编码)
+                    if (chartData.audioData && chartData.audioType) {
+                        // 创建Blob对象来存储音频数据
+                        const byteString = atob(chartData.audioData.split(',')[1]);
+                        const mimeString = chartData.audioType;
+                        const ab = new ArrayBuffer(byteString.length);
+                        const ia = new Uint8Array(ab);
+                        for (let i = 0; i < byteString.length; i++) {
+                            ia[i] = byteString.charCodeAt(i);
+                        }
+                        const blob = new Blob([ab], { type: mimeString });
+                        const audioFile = new File([blob], chartData.songName || "Custom Song", { type: mimeString });
+                        
+                        // 将歌曲数据添加到歌曲列表
+                        gameState.customSongs[songKey] = {
+                            name: chartData.songName || "Custom Song",
+                            file: audioFile,  // 直接嵌入音频文件
+                            duration: chartData.duration || 10000,
+                            notes: chartData.notes || []
+                        };
+                    } else if (chartData.songPath) {
+                        // 兼容旧格式，使用路径方式
+                        // 将歌曲数据添加到歌曲列表
+                        gameState.customSongs[songKey] = {
+                            name: chartData.songName || "Custom Song",
+                            songPath: chartData.songPath,
+                            duration: chartData.duration || 10000,
+                            notes: chartData.notes || []
+                        };
+                    } else {
+                        // 没有音频数据，静音模式
+                        gameState.customSongs[songKey] = {
+                            name: chartData.songName || "Custom Song",
+                            duration: chartData.duration || 10000,
+                            notes: chartData.notes || []
+                        };
+                    }
+
+                    // 在界面中添加按钮
+                    addCustomSongButton(songKey, chartData.songName || "Custom Song");
+                } catch (error) {
+                    console.error('解析JSON文件失败:', error);
+                    alert("解析JSON文件失败，请确保文件格式正确");
+                }
+            };
+            reader.readAsText(file);
+        }
+    });
+
+    // 添加自定义歌曲按钮到界面
+    function addCustomSongButton(songKey, songName) {
+        const button = document.createElement('button');
+        button.className = 'song-button';
+        button.dataset.song = songKey;
+        button.textContent = songName;
+        button.addEventListener('click', () => {
+            startGame(songKey);
+        });
+
+        const testButton = document.querySelector('.song-button[data-song="test"]');
+        if (testButton) {
+            testButton.parentNode.insertBefore(button, testButton);
+        } else {
+            document.querySelector('.song-buttons-container').appendChild(button);
+        }
+    }
+
+    // 播放音乐
+    function playMusic(song) {
+        // 如果已有音频播放，停止
+        if (audioElement) {
+            audioElement.pause();
+            audioElement = null;
+        }
+
+        // 检查歌曲数据是否有效
+        if (!song) {
+            console.error('歌曲数据无效');
+            return;
+        }
+
+        // 创建新的音频元素
+        audioElement = new Audio();
+
+        // 设置音频源 - 支持嵌入的文件或路径
+        if (song.file) {
+            // 使用嵌入的音频文件
+            const url = URL.createObjectURL(song.file);
+            audioElement.src = url;
+        } else if (song.songPath) {
+            // 使用路径方式
+            audioElement.src = song.songPath;
+        } else {
+            console.log('没有音乐文件，将以静音模式进行游戏');
+            return;
+        }
+
+        // 播放音频
+        audioElement.play().catch(e => {
+            console.log("音频播放失败，将以静音模式进行游戏:", e);
+        });
+    }
+
+    function stopMusic() {
+        if (audioElement) {
+            audioElement.pause();
+            audioElement = null;
+        }
+    }
+
+
+    function saveSettings() {
+        gameState.settings.showCombo = document.getElementById('show-combo').checked;
+        gameState.settings.showJudgment = document.getElementById('show-judgment').checked;
+        gameState.settings.showJudgmentText = document.getElementById('show-judgment-text').checked;
+        gameState.settings.showJudgmentShake = document.getElementById('show-judgment-shake').checked;
+
+
+        comboDisplay.style.display = gameState.settings.showCombo ? 'block' : 'none';
+
+
+        const fall1Color = document.getElementById('fall1-color').value;
+        const fall2Color = document.getElementById('fall2-color').value;
+        const fall3Color = document.getElementById('fall3-color').value;
+        const fall4Color = document.getElementById('fall4-color').value;
+        const bumperColor = document.getElementById('bumper-color').value;
+        const longColor = document.getElementById('long-color').value;
+        const lineColor = document.getElementById('line-color').value;
+        const borderRadius = document.getElementById('note-border-radius').value + '%';
+
+        // 应用颜色设置到所有相关元素
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .fall_note1 { background-color: ${fall1Color} !important; border-radius: ${borderRadius} !important; }
+            .fall_note2 { background-color: ${fall2Color} !important; border-radius: ${borderRadius} !important; }
+            .fall_note3 { background-color: ${fall3Color} !important; border-radius: ${borderRadius} !important; }
+            .fall_note4 { background-color: ${fall4Color} !important; border-radius: ${borderRadius} !important; }
+            .bumper1 { background-color: ${bumperColor} !important; border-radius: ${borderRadius} !important; }
+            .bumper2 { background-color: ${bumperColor} !important; border-radius: ${borderRadius} !important; }
+            .bumper3 { background-color: ${bumperColor} !important; border-radius: ${borderRadius} !important; }
+            .long_note1 { background-color: ${longColor} !important; border-radius: ${borderRadius} !important; }
+            .long_note2 { background-color: ${longColor} !important; border-radius: ${borderRadius} !important; }
+            .long_note3 { background-color: ${longColor} !important; border-radius: ${borderRadius} !important; }
+            .long_note4 { background-color: ${longColor} !important; border-radius: ${borderRadius} !important; }
+            .bottom_judging_line { background-color: ${lineColor} !important; }
+        `;
+        document.head.appendChild(style);
+
+        alert('设置已保存');
+    }
+
+    // 返回主菜单
+    document.getElementById('restart-button').addEventListener('click', () => {
+        resultScreen.style.display = 'none';
+        songSelectionScreen.style.display = 'flex';
+    });
+
+    // 恢复默认
+    function resetSettings() {
+
+        document.getElementById('show-combo').checked = true;
+        document.getElementById('show-judgment').checked = true;
+        document.getElementById('show-judgment-text').checked = true;
+        document.getElementById('show-judgment-shake').checked = true;
+        document.getElementById('fall1-color').value = '#5f9ea0';
+        document.getElementById('fall2-color').value = '#5f9ea0';
+        document.getElementById('fall3-color').value = '#ffc0cb';
+        document.getElementById('fall4-color').value = '#ffc0cb';
+        document.getElementById('bumper-color').value = '#0000ff';
+        document.getElementById('long-color').value = '#5f9ea0';
+        document.getElementById('note-border-radius').value = '10';
+        document.getElementById('line-color').value = '#ffffff';
+
+        // 重置背景图片
+        gameState.settings.backgrounds = {
+            songSelect: '',
+            game: '',
+            result: ''
+        };
+
+        songSelectionScreen.style.backgroundImage = '';
+        gameContainer.style.backgroundImage = '';
+        resultScreen.style.backgroundImage = '';
+
+        alert('已恢复默认设置');
+    }
+
+    // 开始游戏
+    function startGame(songKey) {
+        songSelectionScreen.style.display = 'none';
+        gameContainer.style.display = 'block';
+
+        // 应用背景
+        if (gameState.settings.backgrounds.game) {
+            gameContainer.style.backgroundImage = `url(${gameState.settings.backgrounds.game})`;
+        }
+
+        // 初始化
+        gameState.isPlaying = true;
+        gameState.combo = 0;
+        gameState.maxCombo = 0;
+        gameState.score = 0;
+        gameState.missCount = 0;
+        gameState.judgeStats = {
+            aPerfect: 0,
+            perfect: 0,
+            great: 0,
+            good: 0,
+            miss: 0
+        };
+
+        // 歌曲数据
+        let song;
+        if (songKey.startsWith('custom_')) {
+            song = gameState.customSongs[songKey];
+        } else {
+            song = songDatabase[songKey];
+        }
+
+        // 检查数据是否存在
+        if (!song) {
+            console.error('未找到歌曲数据:', songKey);
+            return;
+        }
+
+        gameState.currentSong = song;
+        gameState.notes = [];
+        gameState.activeKeys.clear();
+        gameState.longNotes.clear();
+        gameState.lastHitTime = 0;
+
+        // 更新combo显示
+        updateComboDisplay();
+        updateJudgeStats();
+
+        // 播放音乐
+        playMusic(song);
+
+        // 生成音符
+        startSong();
+    }
+
+    function startSong() {
+        const song = gameState.currentSong;
+
+        // 根据数据生成音符
+        song.notes.forEach(noteData => {
+            setTimeout(() => {
+                if (gameState.isPlaying) {
+                    createNote(noteData.track, noteData.time, noteData.type, noteData.length);
+                }
+            }, noteData.time);
+        });
+
+        // 计算游戏结束时间（应为最后一个音符的时间加上一些缓冲时间）
+        let maxNoteTime = 0;
+        if (song.notes && song.notes.length > 0) {
+            maxNoteTime = Math.max(...song.notes.map(note => note.time));
+        }
+        
+        // 游戏结束时间应该是最后一个音符时间加上1秒缓冲时间
+        const gameEndTime = Math.max(song.duration, maxNoteTime) + 1000;
+
+        if (audioElement) {
+            audioElement.onended = () => {
+                if (gameState.isPlaying) {
+                    endGame();
+                }
+            };
+        } else {
+            // 如果没有音频元素，使用计时器，确保在所有音符结束后结束游戏
+            setTimeout(() => {
+                if (gameState.isPlaying) {
+                    endGame();
+                }
+            }, gameEndTime);
+        }
+    }
+
+    // 创建指定轨道音符
+    function createNote(track, noteTime, type = 'fall', length = 500) {
+        const note = document.createElement('div');
+        let className = '';
+
+        switch (type) {
+            case 'fall':
+                className = `fall_note${track}`;
+                break;
+            case 'long':
+                className = `long_note${track}`;
+                break;
+            case 'bumper':
+                if (track === 1) className = 'bumper1';
+                else if (track === 2) className = 'bumper2';
+                else if (track === 3) className = 'bumper3';
+                break;
+        }
+
+        note.className = className;
+        note.dataset.track = track;
+        note.dataset.time = noteTime;
+        note.dataset.type = type;
+        note.dataset.length = length || 500;
+        note.dataset.judged = 'false'; // 是否已被判定
+        note.dataset.hit = 'false'; // 是否已被击中（用于长音符，弃用）
+
+        // 添加唯一ID
+        const noteId = Date.now() + Math.random();
+        note.dataset.id = noteId;
+
+        // 设置长音符高度（不再使用）
+        if (type === 'long') {
+            // 根据长度计算高度（简化处理）
+            const height = Math.max(3, (length || 500) / 1000 * 10); // 最小3%，每1000ms增加10%
+            note.style.height = height + '%';
+
+            // 调整长音符的初始位置，使其底部与屏幕顶部对齐
+            note.style.top = `-${height}%`;
+        } else {
+            note.style.height = '3%';
+        }
+
+
+        document.getElementById('notes_container').appendChild(note);
+
+
+        const noteObj = {
+            id: noteId,
+            element: note,
+            track: track,
+            time: noteTime,
+            type: type,
+            length: length || 500,
+            judged: false,
+            hit: false // 用于长音符
+        };
+        gameState.notes.push(noteObj);
+
+        // 音符动画结束后自动移除，判断为miss（普通音符和bumper）
+        if (type === 'fall' || type === 'bumper') {
+            setTimeout(() => {
+                // 查找并移除音符
+                const index = gameState.notes.findIndex(n => n.id === noteId);
+                if (index !== -1 && !gameState.notes[index].judged) {
+                    // 音符未被判定，视为miss
+                    gameState.notes[index].judged = true;
+                    note.remove();
+                    gameState.notes.splice(index, 1);
+
+                    handleJudgment('MISS');
+                }
+            }, 800); // 与动画时间一致
+        }
+
+        // 长音符结束时的处理
+        if (type === 'long') {
+            setTimeout(() => {
+                // 查找长音符
+                const index = gameState.notes.findIndex(n => n.id === noteId);
+                if (index !== -1 && !gameState.notes[index].judged) {
+                    // 长音符未被处理，检查是否正在被按住
+                    if (gameState.longNotes.has(noteId)) {
+                        // 正被按住，视为完成
+                        gameState.longNotes.delete(noteId);
+                        note.remove();
+                        gameState.notes.splice(index, 1);
+                        // 长音符成功完成，增加combo
+                        handleJudgment('A_PERFECT');
+                    } else {
+                        // 没被按住，视为miss
+                        gameState.notes[index].judged = true;
+                        note.remove();
+                        gameState.notes.splice(index, 1);
+                        handleJudgment('MISS');
+                    }
+                }
+            }, length || 500);
+        }
+    }
+
+    // 更新combo显示
+    function updateComboDisplay() {
+        comboDisplay.innerText = `COMBO: ${gameState.combo}`;
+    }
+
+    // 更新判定统计显示
+    function updateJudgeStats() {
+        document.getElementById('a-perfect-count').textContent = gameState.judgeStats.aPerfect;
+        document.getElementById('perfect-count').textContent = gameState.judgeStats.perfect;
+        document.getElementById('great-count').textContent = gameState.judgeStats.great;
+        document.getElementById('good-count').textContent = gameState.judgeStats.good;
+        document.getElementById('miss-count-stat').textContent = gameState.judgeStats.miss;
+    }
+
+    // 显示判定文字
+    function showJudgmentText(text, color = 'white') {
+        if (!gameState.settings.showJudgmentText) return;
+
+        const display = document.getElementById('judge-text-display');
+
+        // 清除之前可能存在的定时器
+        if (display.timeoutId) {
+            clearTimeout(display.timeoutId);
+        }
+
+        // 设置新文字和颜色
+        display.innerText = text;
+        display.style.color = color;
+
+        // 设置新的定时器并保存其ID
+        const timeoutId = setTimeout(() => {
+            display.innerText = '';
+            display.timeoutId = null;
+        }, 30000); // 30秒后清除文字（可根据需要调整时间）
+
+        // 保存定时器ID
+        display.timeoutId = timeoutId;
+    }
+    // 显示判定文字特效（已弃用）
+    // function showJudgment(text, color = 'white') {
+    //     if (!gameState.settings.showJudgment) return;
+
+    //     const judgment = document.createElement('div');
+    //     judgment.className = 'judgment-text ' + text.toLowerCase().replace('-', '');
+    //     judgment.innerText = text;
+    //     judgment.style.color = color;
+    //     judgmentContainer.appendChild(judgment);
+
+
+    //     setTimeout(() => {
+    //         judgment.remove();
+    //     }, 500);
+    // }
+
+    // 按键反馈
+    function showKeyHitEffect(track) {
+        const effect = document.createElement('div');
+        effect.className = 'key-hit-effect';
+
+        //设置位置、颜色
+        switch (track) {
+            case 1:
+                effect.style.left = '36.08%';
+                effect.style.top = '82%';
+                effect.style.backgroundColor = 'cadetblue';
+                break;
+            case 2:
+                effect.style.left = '43.06%';
+                effect.style.top = '82%';
+                effect.style.backgroundColor = 'cadetblue';
+                break;
+            case 3:
+                effect.style.left = '50.06%';
+                effect.style.top = '82%';
+                effect.style.backgroundColor = 'pink';
+                break;
+            case 4:
+                effect.style.left = '57.05%';
+                effect.style.top = '82%';
+                effect.style.backgroundColor = 'pink';
+                break;
+        }
+
+        effect.style.width = '6.85%';
+        document.body.appendChild(effect);
+
+        // 动画结束后移除
+        setTimeout(() => {
+            effect.remove();
+        }, 300);
+    }
+
+    // 击中音符效果
+    function showNoteHitEffect(track) {
+        const effect = document.createElement('div');
+        effect.className = 'note-hit-effect';
+
+        // 根据轨道设置位置
+        switch (track) {
+            case 1:
+                effect.style.left = '36.5%';
+                break;
+            case 2:
+                effect.style.left = '43.5%';
+                break;
+            case 3:
+                effect.style.left = '50.5%';
+                break;
+            case 4:
+                effect.style.left = '57.5%';
+                break;
+        }
+
+        effect.style.top = '83%';
+        document.body.appendChild(effect);
+
+
+        setTimeout(() => {
+            effect.remove();
+        }, 500);
+    }
+
+    // 判定
+    function handleJudgment(judgmentType) {
+        // 防止短时间内重复触发
+        if (Date.now() - gameState.lastHitTime < 50) {
+            return;
+        }
+
+        const level = JUDGE_LEVELS[judgmentType];
+
+        if (judgmentType === 'MISS') {
+            gameState.combo = 0;
+            gameState.missCount++;
+            gameState.judgeStats.miss++;
+            showJudgmentText('MISS', level.color);
+        } else {
+            gameState.combo++;
+            if (gameState.combo > gameState.maxCombo) {
+                gameState.maxCombo = gameState.combo;
+            }
+            gameState.score += level.score;
+
+            // 更新统计
+            switch (judgmentType) {
+                case 'A_PERFECT':
+                    gameState.judgeStats.aPerfect++;
+                    showJudgmentText('A-PERFECT!', level.color);
+                    break;
+                case 'PERFECT':
+                    gameState.judgeStats.perfect++;
+                    showJudgmentText('PERFECT!', level.color);
+                    break;
+                case 'GREAT':
+                    gameState.judgeStats.great++;
+                    showJudgmentText('GREAT!', level.color);
+                    break;
+                case 'GOOD':
+                    gameState.judgeStats.good++;
+                    showJudgmentText('GOOD!', level.color);
+                    break;
+            }
+        }
+
+        gameState.lastHitTime = Date.now();
+        updateComboDisplay();
+        updateJudgeStats();
+        //showJudgment(level.text, level.color);弃用大字特效
+    }
+
+    // 判定等级
+    function judgeLevel(diffMs) {
+        if (Math.abs(diffMs) <= JUDGE_LEVELS.A_PERFECT.range) {
+            return 'A_PERFECT';
+        } else if (Math.abs(diffMs) <= JUDGE_LEVELS.PERFECT.range) {
+            return 'PERFECT';
+        } else if (Math.abs(diffMs) <= JUDGE_LEVELS.GREAT.range) {
+            return 'GREAT';
+        } else if (Math.abs(diffMs) <= JUDGE_LEVELS.GOOD.range) {
+            return 'GOOD';
+        } else if (Math.abs(diffMs) <= JUDGE_LEVELS.MISS.range) {
+            return 'MISS';
+        }
+        return 'MISS';
+    }
+
+    // 检查是否有音符在判定区域
+    function hasNoteInJudgeArea() {
+        const judgeLine = document.querySelector('.bottom_judging_line');
+        const judgeLineTop = judgeLine.getBoundingClientRect().top;
+        let inJudgeArea = false;
+
+        // 所有未判定的音符
+        gameState.notes.forEach(note => {
+            if (!note.judged) {
+                const noteCenter = note.element.getBoundingClientRect().top +
+                    (note.element.getBoundingClientRect().height / 2);
+                const diff = Math.abs(noteCenter - judgeLineTop);
+
+
+                if (diff < JUDGE_LEVELS.MISS.range * 200 / 200) { 
+                    inJudgeArea = true;
+                }
+            }
+        });
+
+        return inJudgeArea;
+    }
+
+    // 键盘事件
+    document.addEventListener('keydown', function (event) {
+        if (!gameState.isPlaying) return;
+
+        const player_key = event.keyCode;
+
+        // 避免重复判断
+        if (gameState.activeKeys.has(player_key)) {
+            return;
+        }
+
+        // 记录按下的键
+        gameState.activeKeys.add(player_key);
+
+        let track = 0;
+
+        // 确定按键对应的轨道
+        switch (player_key) {
+            case 68: // D 
+                track = 1;
+                break;
+            case 70: // F 
+                track = 2;
+                break;
+            case 74: // J
+                track = 3;
+                break;
+            case 75: // K 
+                track = 4;
+                break;
+            default:
+                return; 
+        }
+
+        // 显示按键反馈
+        showKeyHitEffect(track);
+
+        // 查找判定线附近的音符
+        const judgeLine = document.querySelector('.bottom_judging_line');
+        const judgeLineTop = judgeLine.getBoundingClientRect().top;
+        let hitNote = null;
+        let minDiff = Infinity;
+        let bestDiffMs = 0;
+
+        // 遍历当前轨道音符，找到最接近判定线的未判定音符
+        gameState.notes.forEach(note => {
+            if (!note.judged && (note.track === track ||
+                (note.type === 'bumper' &&
+                    ((note.track === 1 && (track === 1 || track === 2)) || // bumper1 覆盖轨道1和2
+                        (note.track === 2 && (track === 2 || track === 3)) || // bumper2 覆盖2和3
+                        (note.track === 3 && (track === 3 || track === 4)))))) { 
+                // 计算音符中心与判定线差值
+                const noteCenter = note.element.getBoundingClientRect().top +
+                    (note.element.getBoundingClientRect().height / 2);
+                const diff = Math.abs(noteCenter - judgeLineTop);
+
+                // 计算时间差
+                const diffMs = (diff / window.innerHeight) * 800;
+
+                // 只考虑在判定范围内的音符，并选择最接近判定线的音符
+                if (diff <= JUDGE_LEVELS.MISS.range * (window.innerHeight / 200) && diff < minDiff) {
+                    minDiff = diff;
+                    hitNote = note;
+                    bestDiffMs = diffMs;
+                }
+            }
+        });
+
+        // 如果找到可击中的音符
+        if (hitNote) {
+            // 判定等级
+            const judgment = judgeLevel(bestDiffMs);
+
+            // 标记已判定
+            hitNote.judged = true;
+
+            // 对于长音符，标记为已击中但不立即移除（弃用）
+            if (hitNote.type === 'long') {
+                hitNote.hit = true;
+                gameState.longNotes.set(hitNote.id, hitNote);
+                // 击中长音符，增加combo
+                handleJudgment(judgment);
+            } else {
+                // 显示击中音符效果
+                showNoteHitEffect(hitNote.track);
+
+                // 移除音符元素
+                hitNote.element.remove();
+
+                // 从活动音符列表中移除
+                const index = gameState.notes.findIndex(n => n.id === hitNote.id);
+                if (index !== -1) {
+                    gameState.notes.splice(index, 1);
+                }
+
+                handleJudgment(judgment);
+            }
+        } else {
+            // 修改部分：只在当前轨道有音符在判定区域时才计入miss
+            // 检查当前轨道是否有音符在判定区域
+            let hasNoteInTrack = false;
+            gameState.notes.forEach(note => {
+                if (!note.judged && note.track === track) {
+                    const noteCenter = note.element.getBoundingClientRect().top +
+                        (note.element.getBoundingClientRect().height / 2);
+                    const diff = Math.abs(noteCenter - judgeLineTop);
+                    
+                    // 使用更精确的判定范围计算
+                    if (diff <= JUDGE_LEVELS.MISS.range * (window.innerHeight / 200)) {
+                        hasNoteInTrack = true;
+                    }
+                }
+            });
+            
+            // 只有当当前轨道有音符在判定区域时才计入miss
+            if (hasNoteInTrack) {
+                handleJudgment('MISS');
+            }
+        }
+    });
+
+    // 键盘释放事件
+    document.addEventListener('keyup', function (event) {
+        const player_key = event.keyCode;
+
+        gameState.activeKeys.delete(player_key);
+
+        // 如果是长音符，检查是否成功完成
+        if (gameState.isPlaying) {
+            // 查找释放的键对应的轨道
+            let track = 0;
+            switch (player_key) {
+                case 68: // D 
+                    track = 1;
+                    break;
+                case 70: // F 
+                    track = 2;
+                    break;
+                case 74: // J 
+                    track = 3;
+                    break;
+                case 75: // K
+                    track = 4;
+                    break;
+                default:
+                    return;
+            }
+
+            // 查找是否有正在按住的长音符
+            for (let [id, note] of gameState.longNotes) {
+                if (note.track === track) {
+                    // 检查长音符是否仍在判定区域
+                    const judgeLine = document.querySelector('.bottom_judging_line');
+                    const judgeLineTop = judgeLine.getBoundingClientRect().top;
+                    const noteCenter = note.element.getBoundingClientRect().top +
+                        (note.element.getBoundingClientRect().height / 2);
+                    const diff = Math.abs(noteCenter - judgeLineTop);
+
+                    const diffMs = (diff / window.innerHeight) * 800;
+
+                    const judgment = judgeLevel(diffMs);
+
+                    // 使用一致的判定范围计算
+                    if (diff <= JUDGE_LEVELS.MISS.range * (window.innerHeight / 200)) {
+
+                        note.element.remove();
+                        const index = gameState.notes.findIndex(n => n.id === note.id);
+                        if (index !== -1) {
+                            gameState.notes.splice(index, 1);
+                        }
+                        gameState.longNotes.delete(id);
+                        showNoteHitEffect(track);
+                        handleJudgment(judgment);
+                    } else {
+                        // 长音符提前释放，视为miss
+                        note.element.remove();
+                        const index = gameState.notes.findIndex(n => n.id === note.id);
+                        if (index !== -1) {
+                            gameState.notes.splice(index, 1);
+                        }
+                        gameState.longNotes.delete(id);
+                        handleJudgment('MISS');
+                    }
+                    break;
+                }
+            }
+        }
+    });
+
+    // 结束游戏
+    function endGame() {
+        gameState.isPlaying = false;
+
+        // 隐藏游戏界面
+        gameContainer.style.display = 'none';
+
+        // 显示成绩界面
+        document.getElementById('final-score').innerText = gameState.score;
+        document.getElementById('max-combo').innerText = gameState.maxCombo;
+        document.getElementById('result-a-perfect').innerText = gameState.judgeStats.aPerfect;
+        document.getElementById('result-perfect').innerText = gameState.judgeStats.perfect;
+        document.getElementById('result-great').innerText = gameState.judgeStats.great;
+        document.getElementById('result-good').innerText = gameState.judgeStats.good;
+        document.getElementById('result-miss').innerText = gameState.judgeStats.miss;
+        resultScreen.style.display = 'flex';
+
+
+
+        // 清理音符
+        document.getElementById('notes_container').innerHTML = '';
+    }
+</script>

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>歌曲JSON生成器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #282828;
+            font-family: Arial, sans-serif;
+            color: white;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        input {
+            background: #444;
+            color: white;
+        }
+
+        button {
+            background: #3498db;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        #startButton {
+            background: #27ae60;
+        }
+
+        #startButton:hover {
+            background: #219653;
+        }
+
+        #finishButton {
+            background: #e67e22;
+        }
+
+        #finishButton:hover {
+            background: #d35400;
+        }
+
+        .instructions {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .instructions h2 {
+            margin-bottom: 10px;
+        }
+
+        .instructions ul {
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+        }
+
+        .note-log {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .note-log h2 {
+            margin-bottom: 10px;
+        }
+
+        .note-item {
+            padding: 5px 0;
+            border-bottom: 1px solid #444;
+        }
+
+        .hidden {
+            display: none;
+        }
+        
+        #backButton {
+            background: #95a5a6;
+            margin-top: 20px;
+        }
+
+        #backButton:hover {
+            background: #7f8c8d;
+        }
+        
+        #backButton2 {
+            background: #95a5a6;
+            margin-top: 20px;
+        }
+
+        #backButton2:hover {
+            background: #7f8c8d;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .key-display {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .key {
+            width: 80px;
+            height: 80px;
+            background: #444;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .key.active {
+            background: #3498db;
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>歌曲JSON生成器</h1>
+        
+        <div id="setupPhase">
+            <div class="form-group">
+                <label for="songFile">选择歌曲文件 (可选):</label>
+                <button id="selectSongButton">选择歌曲文件</button>
+                <input type="file" id="songFile" class="file-input" accept="audio/*">
+                <div id="selectedSongName">未选择文件（可选）</div>
+                <div id="fileWarning" style="color: #ffcc00; font-size: 14px; margin-top: 5px; display: none;">
+                    注意：音乐文件放到同级目录下music文件夹中也能在游戏中播放。有歌曲时谱面时长无效，音乐结束时结束游戏。
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="songName">歌曲名称:</label>
+                <input type="text" id="songName" placeholder="例如: Song 1">
+            </div>
+            
+            <div class="form-group">
+                <label for="chartDuration">谱面时长 (秒):</label>
+                <input type="number" id="chartDuration" placeholder="例如: 120 (2分钟)" min="1" step="1">
+            </div>
+            
+            <button id="startButton">开始录制</button>
+            <button id="backButton">返回主菜单</button>
+        </div>
+        
+        <div id="recordingPhase" class="hidden">
+            <div class="instructions">
+                <h2>录制说明</h2>
+                <ul>
+                    <li>按 D、F、J、K 键生成相应轨道的音符</li>
+                    <li>不支持Bumper音符，请在json文件中手动修改</li>
+                    <li>点击"完成录制"按钮生成对应JSON文件</li>
+                    <li>如果选择了音乐文件，会自动开始播放</li>
+                    <li>音符生成时间已减去800ms已对应判定线位置，使音符下落到判定线时，正好按下按键</li>
+                </ul>
+            </div>
+            
+            <div class="form-group">
+                <button id="playPauseButton">播放/暂停音乐</button>
+            </div>
+            
+            <div class="key-display">
+                <div class="key" id="keyD">D</div>
+                <div class="key" id="keyF">F</div>
+                <div class="key" id="keyJ">J</div>
+                <div class="key" id="keyK">K</div>
+            </div>
+            
+            <div class="note-log">
+                <h2>已录制音符:</h2>
+                <div id="noteList"></div>
+            </div>
+            
+            <button id="finishButton">完成录制</button>
+            <button id="backButton2">返回主菜单</button>
+        </div>
+    </div>
+
+    <script>
+        let notes = [];
+        let startTime = 0;
+        let recording = false;
+        let selectedFile = null;
+        let audioElement = null;  // 用于播放音乐
+        let isPlaying = false;    // 音乐播放状态
+
+        document.getElementById('selectSongButton').addEventListener('click', function() {
+            document.getElementById('songFile').click();
+        });
+
+        document.getElementById('songFile').addEventListener('change', function(event) {
+            selectedFile = event.target.files[0];
+            if (selectedFile) {
+                document.getElementById('selectedSongName').textContent = selectedFile.name;
+                // 显示提示信息
+                document.getElementById('fileWarning').style.display = 'block';
+            } else {
+                document.getElementById('fileWarning').style.display = 'none';
+            }
+        });
+
+        document.getElementById('startButton').addEventListener('click', startRecording);
+        document.getElementById('finishButton').addEventListener('click', finishRecording);
+        document.getElementById('backButton').addEventListener('click', function() {
+            window.location.href = 'main_play.html';
+        });
+        document.getElementById('backButton2').addEventListener('click', function() {
+            window.location.href = 'main_play.html';
+        });
+
+        // 播放/暂停音乐按钮
+        document.getElementById('playPauseButton').addEventListener('click', function() {
+            if (!selectedFile) {
+                alert('请先选择音乐文件');
+                return;
+            }
+            
+            if (audioElement) {
+                if (isPlaying) {
+                    audioElement.pause();
+                    isPlaying = false;
+                } else {
+                    audioElement.play()
+                        .then(() => {
+                            isPlaying = true;
+                        })
+                        .catch(e => {
+                            console.error("音频播放失败:", e);
+                            alert("音频播放失败: " + e.message);
+                        });
+                }
+            } else {
+                // 如果还没有创建音频元素，则创建并播放
+                playMusic(selectedFile);
+            }
+        });
+
+        function startRecording() {
+            const songName = document.getElementById('songName').value;
+            
+            if (!songName) {
+                alert('请填写歌曲名称');
+                return;
+            }
+            
+            // 初始化数据
+            notes = [];
+            startTime = Date.now();
+            recording = true;
+            
+            // 切换界面
+            document.getElementById('setupPhase').classList.add('hidden');
+            document.getElementById('recordingPhase').classList.remove('hidden');
+            
+            // 初始化数据
+            notes = [];
+            startTime = Date.now();
+            recording = true;
+            
+            // 添加按键监听
+            document.addEventListener('keydown', handleKeyPress);
+            
+            // 如果选择了音乐文件，则开始播放
+            if (selectedFile) {
+                playMusic(selectedFile);
+            }
+        }
+
+        // 播放音乐函数
+        function playMusic(file) {
+            if (audioElement) {
+                audioElement.pause();
+                audioElement = null;
+            }
+            
+            // 创建新的音频元素
+            audioElement = new Audio();
+            const url = URL.createObjectURL(file);
+            audioElement.src = url;
+            
+            // 播放音频
+            audioElement.play()
+                .then(() => {
+                    isPlaying = true;
+                    console.log("音乐开始播放");
+                })
+                .catch(e => {
+                    console.error("音频播放失败:", e);
+                    alert("音频播放失败: " + e.message);
+                });
+                
+            // 监听播放结束事件
+            audioElement.addEventListener('ended', function() {
+                isPlaying = false;
+                console.log("音乐播放结束");
+            });
+        }
+
+        function handleKeyPress(event) {
+            if (!recording) return;
+            
+            const key = event.key.toLowerCase();
+            let track = 0;
+            
+            // 确定轨道
+            switch (key) {
+                case 'd':
+                    track = 1;
+                    activateKey('keyD');
+                    break;
+                case 'f':
+                    track = 2;
+                    activateKey('keyF');
+                    break;
+                case 'j':
+                    track = 3;
+                    activateKey('keyJ');
+                    break;
+                case 'k':
+                    track = 4;
+                    activateKey('keyK');
+                    break;
+                default:
+                    return;
+            }
+            
+            // 计算时间（相对于开始录制的时间）
+            // 提前800ms，使音符在按键时正好落到判定线
+            const time = Date.now() - startTime - 800;
+            
+            // 添加音符
+            const note = {
+                time: Math.max(0, time), // 确保时间不为负数
+                track: track,
+                type: "fall"
+            };
+            
+            notes.push(note);
+            
+            // 显示音符
+            displayNote(note);
+        }
+
+        function activateKey(keyId) {
+            const keyElement = document.getElementById(keyId);
+            keyElement.classList.add('active');
+            setTimeout(() => {
+                keyElement.classList.remove('active');
+            }, 100);
+        }
+
+        function displayNote(note) {
+            const noteList = document.getElementById('noteList');
+            const noteElement = document.createElement('div');
+            noteElement.className = 'note-item';
+            noteElement.textContent = `时间: ${note.time}ms, 轨道: ${note.track}, 类型: ${note.type}`;
+            noteList.appendChild(noteElement);
+            
+            // 滚动到底部
+            noteList.scrollTop = noteList.scrollHeight;
+        }
+
+        function finishRecording() {
+            // 停止音乐播放
+            if (audioElement) {
+                audioElement.pause();
+                audioElement = null;
+                isPlaying = false;
+            }
+            
+            const songName = document.getElementById('songName').value;
+            const chartDurationInput = document.getElementById('chartDuration').value;
+            
+            if (!songName) {
+                alert('请填写歌曲名称');
+                return;
+            }
+            
+            // 检查谱面时长
+            let chartDuration = 10000; // 默认10秒
+            if (chartDurationInput) {
+                const durationInSeconds = parseInt(chartDurationInput);
+                if (isNaN(durationInSeconds) || durationInSeconds <= 0) {
+                    alert('请输入有效的谱面时长（秒）');
+                    return;
+                }
+                chartDuration = durationInSeconds * 1000; // 转换为毫秒
+            } else if (notes.length > 0) {
+                // 如果没有输入时长，但有音符，则自动计算时长
+                chartDuration = Math.max(...notes.map(n => n.time)) + 5000;
+            }
+            
+            const jsonData = {
+                name: songName,
+                songName: songName,
+                notes: notes,
+                duration: chartDuration
+            };
+            
+            // 如果选择了音乐文件，则添加歌曲路径
+            if (selectedFile) {
+                //放在music文件夹下
+                jsonData.songPath = "music/" + selectedFile.name;
+                
+                // 嵌入式频数据
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // 添加音频数据到JSON
+                    jsonData.audioData = e.target.result;
+                    jsonData.audioType = selectedFile.type;
+                    
+                    // 生成JSON文件并下载
+                    downloadJSON(jsonData, songName);
+                };
+                reader.readAsDataURL(selectedFile);
+                return; 
+            }
+            
+            downloadJSON(jsonData, songName);
+        }
+        
+        // 下载JSON文件
+        function downloadJSON(jsonData, songName) {
+            const dataStr = JSON.stringify(jsonData, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = songName + '.json';
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            document.body.appendChild(linkElement); 
+            linkElement.click();
+            document.body.removeChild(linkElement); 
+            
+            if (selectedFile) {
+                alert('谱面文件已生成！');
+            }
+            
+            // 结束录制
+            recording = false;
+            document.removeEventListener('keydown', handleKeyPress);
+            
+            // 切换界面
+            document.getElementById('recordingPhase').classList.add('hidden');
+            document.getElementById('setupPhase').classList.remove('hidden');
+            
+            // 清空音符列表
+            document.getElementById('noteList').innerHTML = '';
+            
+            // 重置文件选择
+            document.getElementById('songFile').value = '';
+            document.getElementById('selectedSongName').textContent = '未选择文件（可选）';
+            document.getElementById('fileWarning').style.display = 'none';
+            document.getElementById('chartDuration').value = '';
+            selectedFile = null;
+        }
+    </script>
+</body>
+</html>

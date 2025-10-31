@@ -1,0 +1,339 @@
+{
+    "name": "Aura‘s Drum",
+    "songName": "Aura‘s Drum",
+    "songPath": "music/Aura‘s Drum.mp3",
+    "duration": 11000,
+    "notes": [
+    {
+       "time": 450,
+      "track": 1,
+      "type": "fall"
+    },
+    {
+      "time": 950,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 1350,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 1800,
+      "track": 4,
+      "type": "fall"
+    },
+    {
+      "time": 2200,
+      "track": 1,
+      "type": "fall"
+    },
+    {
+      "time": 2600,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 3500,
+      "track": 4,
+      "type": "fall"
+    },
+    {
+      "time": 3900,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 4300,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 4750,
+      "track": 1,
+      "type": "fall"
+    },
+    {
+      "time": 5200,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 5650,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 6050,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 6050,
+      "track": 4,
+      "type": "fall"
+    },
+    {
+      "time": 7000,
+      "track": 1,
+      "type": "fall"
+    },
+    {
+      "time": 7350,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 7750,
+      "track": 1,
+      "type": "fall"
+    },
+    {
+      "time": 7750,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 8200,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 8600,
+      "track": 4,
+      "type": "fall"
+    },
+    {
+      "time": 8850,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 9450,
+      "track": 1,
+      "type": "fall"
+    },
+    {
+      "time": 9700,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 10150,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 10800,
+      "track": 4,
+      "type": "fall"
+    },
+    {
+      "time": 12150,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 12550,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 14300,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 14300,
+      "track": 4,
+      "type": "fall"
+    },
+    {
+      "time": 14700,
+      "track": 1,
+      "type": "fall"
+    },
+    {
+      "time": 14700,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 15100,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 15100,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 15500,
+      "track": 4,
+      "type": "fall"
+    },
+    {
+      "time": 15950,
+      "track": 1,
+      "type": "fall"
+    },
+    {
+      "time": 16400,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 16800,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 17600,
+      "track": 4,
+      "type": "fall"
+    },
+    {
+      "time": 17850,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 18050,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 18250,
+      "track": 1,
+      "type": "fall"
+    },
+    {
+      "time": 18500,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 18650,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 18900,
+      "track": 4,
+      "type": "fall"
+    },
+    {
+      "time": 19100,
+      "track": 1,
+      "type": "fall"
+    },
+    {
+      "time": 19300,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 19550,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 19950,
+      "track": 4,
+      "type": "fall"
+    },
+    {
+      "time": 20150,
+      "track": 1,
+      "type": "fall"
+    },
+    {
+      "time": 20850,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 21000,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 21150,
+      "track": 1,
+      "type": "fall"
+    },
+    {
+      "time": 21850,
+      "track": 4,
+      "type": "fall"
+    },
+    {
+      "time": 22000,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 22950,
+      "track": 1,
+      "type": "fall"
+    },
+    {
+      "time": 23250,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 23500,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 23700,
+      "track": 1,
+      "type": "fall"
+    },
+    {
+      "time": 23900,
+      "track": 4,
+      "type": "fall"
+    },
+    {
+      "time": 24100,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 24300,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 24500,
+      "track": 1,
+      "type": "fall"
+    },
+    {
+      "time": 24700,
+      "track": 4,
+      "type": "fall"
+    },
+    {
+      "time": 24950,
+      "track": 2,
+      "type": "fall"
+    },
+    {
+      "time": 25350,
+      "track": 3,
+      "type": "fall"
+    },
+    {
+      "time": 25550,
+      "track": 1,
+      "type": "fall"
+    }
+
+    ]
+}
