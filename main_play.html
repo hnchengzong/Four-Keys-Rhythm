@@ -606,7 +606,7 @@
             border: none;
         }
 
-        /* 判定文字显示区域 */
+        /* 判定文字显示 */
         .judge-text-display {
             position: fixed;
             top: 10%;
@@ -639,18 +639,6 @@
             color: #F44336;
         }
 
-        /* 打击误差显示，已弃用 */
-        /* .hit-delta-display {
-            position: fixed;
-            bottom: 10%;
-            right: 2%;
-            width: 20%;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 1%;
-            border-radius: 1%;
-            font-size: 1.2vw;
-            text-align: center;
-        } */
 
         .hit-delta-value {
             font-size: 1.5vw;
@@ -658,7 +646,7 @@
             margin-top: 5px;
         }
 
-        /* 震动动画 */
+
         @keyframes shake {
             0% {
                 transform: translate(0, 0);
@@ -702,7 +690,7 @@
             background: rgba(102, 102, 102, 0.8);
         }
 
-        /* 返回主菜单 */
+
         #back-to-menu-button {
             position: fixed;
             top: 2%;
@@ -725,7 +713,7 @@
 </head>
 
 <body>
-    <!-- 歌曲选择界面 -->
+    <!-- 歌曲选择 -->
     <div id="song-selection">
         <h1>Four Keys Rhythm</h1>
         <h1>选择歌曲</h1>
@@ -770,11 +758,6 @@
                 </label>
             </div>
 
-            <!-- <div class="setting-group">
-                <label class="setting-label">
-                    <input type="checkbox" id="show-judgment" checked> 显示判定文字
-                </label>
-            </div> -->
 
             <div class="setting-group">
                 <label class="setting-label">
@@ -782,11 +765,6 @@
                 </label>
             </div>
 
-            <!-- <div class="setting-group">
-                <label class="setting-label">
-                    <input type="checkbox" id="show-judgment-shake" checked> 启用震动特效
-                </label>
-            </div> -->
 
             <div class="setting-group">
                 <label class="setting-label">Fall音符1颜色:</label>
@@ -836,7 +814,7 @@
         </div>
     </div>
 
-    <!-- 游戏主界面 -->
+    <!--主界面 -->
     <div id="game-container">
         <button id="back-to-menu-button">返回主菜单</button>
         <div class="line_border1">
@@ -909,7 +887,7 @@
         isPlaying: false,
         currentSong: null,
         notes: [], // 存储当前活动音符
-        songData: {}, // 存储歌曲数据
+        songData: {}, // 歌曲数据
         activeKeys: new Set(), // 当前按下的键
         longNotes: new Map(), // 正在按住的长音符（弃用）
         lastHitTime: 0, // 上次击中时间，用于防止重复判定
@@ -950,10 +928,7 @@
     const songDatabase = {
         song1: null,
         song2: null,
-        song3: null,
-        test: null,
-        test2: null,
-        test3: null
+
     };
 
     // 初始化数据库
@@ -969,25 +944,6 @@
             document.querySelector('.song-button[data-song="song2"]').textContent =
                 songDatabase.song2.name || "Song 2";
 
-            const song3Response = await fetch('json/song3.json');
-            songDatabase.song3 = await song3Response.json();
-            document.querySelector('.song-button[data-song="song3"]').textContent =
-                songDatabase.song3.name || "Song 3";
-
-            const testResponse = await fetch('json/test.json');
-            songDatabase.test = await testResponse.json();
-            document.querySelector('.song-button[data-song="test"]').textContent =
-                songDatabase.test.name || "测试歌曲(含Bumper和Long音符)";
-
-            const test2Response = await fetch('json/test2.json');
-            songDatabase.test2 = await test2Response.json();
-            document.querySelector('.song-button[data-song="test2"]').textContent =
-                songDatabase.test2.name || "测试歌曲2(更多Bumper和Long音符)";
-
-            const test3Response = await fetch('json/test3.json');
-            songDatabase.test3 = await test3Response.json();
-            document.querySelector('.song-button[data-song="test3"]').textContent =
-                songDatabase.test3.name || "测试歌曲3";
         } catch (error) {
             console.error('加载歌曲数据失败:', error);
         }
@@ -1015,9 +971,7 @@
     const gameBgInput = document.getElementById('game-bg-input');
     const resultBgInput = document.getElementById('result-bg-input');
 
-    // 音频
     let audioElement = null;
-
 
     document.querySelectorAll('.song-button').forEach(button => {
         button.addEventListener('click', () => {
@@ -1025,11 +979,6 @@
             startGame(songKey);
         });
     });
-
-    // 已弃用单独加载歌曲
-    //document.getElementById('import-song-button').addEventListener('click', () => {
-    // songFileInput.click();
-    //});
 
     document.getElementById('import-chart-button').addEventListener('click', () => {
         chartFileInput.click();
@@ -1062,7 +1011,7 @@
         songSelectionScreen.style.display = 'flex';
     });
 
-    // 处理背景图片导入
+    // 导入背景图片
     songBgInput.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -1090,17 +1039,8 @@
         }
     });
 
-    // 处理歌曲文件导入（弃用）
-    // songFileInput.addEventListener('change', (event) => {
-    //     const file = event.target.files[0];
-    //     if (file) {
 
-    //         alert("请导入包含歌曲信息的JSON文件");
-    //         event.target.value = ''; 
-    //     }
-    // });
-
-    // 谱面文件导入
+    // 导入谱面文件
     chartFileInput.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -1114,7 +1054,6 @@
 
                     // 检查是否有嵌入的音频数据 (Base64编码)
                     if (chartData.audioData && chartData.audioType) {
-                        // 创建Blob对象来存储音频数据
                         const byteString = atob(chartData.audioData.split(',')[1]);
                         const mimeString = chartData.audioType;
                         const ab = new ArrayBuffer(byteString.length);
@@ -1128,13 +1067,13 @@
                         // 将歌曲数据添加到歌曲列表
                         gameState.customSongs[songKey] = {
                             name: chartData.songName || "Custom Song",
-                            file: audioFile,  // 直接嵌入音频文件
+                            file: audioFile,  
                             duration: chartData.duration || 10000,
                             notes: chartData.notes || []
                         };
                     } else if (chartData.songPath) {
-                        // 兼容旧格式，使用路径方式
-                        // 将歌曲数据添加到歌曲列表
+
+
                         gameState.customSongs[songKey] = {
                             name: chartData.songName || "Custom Song",
                             songPath: chartData.songPath,
@@ -1142,7 +1081,7 @@
                             notes: chartData.notes || []
                         };
                     } else {
-                        // 没有音频数据，静音模式
+                        // 无音频数据
                         gameState.customSongs[songKey] = {
                             name: chartData.songName || "Custom Song",
                             duration: chartData.duration || 10000,
@@ -1150,7 +1089,6 @@
                         };
                     }
 
-                    // 在界面中添加按钮
                     addCustomSongButton(songKey, chartData.songName || "Custom Song");
                 } catch (error) {
                     console.error('解析JSON文件失败:', error);
@@ -1161,7 +1099,7 @@
         }
     });
 
-    // 添加自定义歌曲按钮到界面
+
     function addCustomSongButton(songKey, songName) {
         const button = document.createElement('button');
         button.className = 'song-button';
@@ -1179,30 +1117,26 @@
         }
     }
 
-    // 播放音乐
+
     function playMusic(song) {
-        // 如果已有音频播放，停止
+
         if (audioElement) {
             audioElement.pause();
             audioElement = null;
         }
 
-        // 检查歌曲数据是否有效
         if (!song) {
             console.error('歌曲数据无效');
             return;
         }
 
-        // 创建新的音频元素
+
         audioElement = new Audio();
 
-        // 设置音频源 - 支持嵌入的文件或路径
         if (song.file) {
-            // 使用嵌入的音频文件
             const url = URL.createObjectURL(song.file);
             audioElement.src = url;
         } else if (song.songPath) {
-            // 使用路径方式
             audioElement.src = song.songPath;
         } else {
             console.log('没有音乐文件，将以静音模式进行游戏');
@@ -1242,7 +1176,7 @@
         const lineColor = document.getElementById('line-color').value;
         const borderRadius = document.getElementById('note-border-radius').value + '%';
 
-        // 应用颜色设置到所有相关元素
+        // 应用到所有相关元素
         const style = document.createElement('style');
         style.innerHTML = `
             .fall_note1 { background-color: ${fall1Color} !important; border-radius: ${borderRadius} !important; }
@@ -1263,13 +1197,11 @@
         alert('设置已保存');
     }
 
-    // 返回主菜单
     document.getElementById('restart-button').addEventListener('click', () => {
         resultScreen.style.display = 'none';
         songSelectionScreen.style.display = 'flex';
     });
 
-    // 恢复默认
     function resetSettings() {
 
         document.getElementById('show-combo').checked = true;
@@ -1299,17 +1231,12 @@
         alert('已恢复默认设置');
     }
 
-    // 开始游戏
     function startGame(songKey) {
         songSelectionScreen.style.display = 'none';
         gameContainer.style.display = 'block';
-
-        // 应用背景
         if (gameState.settings.backgrounds.game) {
             gameContainer.style.backgroundImage = `url(${gameState.settings.backgrounds.game})`;
         }
-
-        // 初始化
         gameState.isPlaying = true;
         gameState.combo = 0;
         gameState.maxCombo = 0;
@@ -1323,7 +1250,6 @@
             miss: 0
         };
 
-        // 歌曲数据
         let song;
         if (songKey.startsWith('custom_')) {
             song = gameState.customSongs[songKey];
@@ -1331,7 +1257,6 @@
             song = songDatabase[songKey];
         }
 
-        // 检查数据是否存在
         if (!song) {
             console.error('未找到歌曲数据:', songKey);
             return;
@@ -1343,21 +1268,15 @@
         gameState.longNotes.clear();
         gameState.lastHitTime = 0;
 
-        // 更新combo显示
         updateComboDisplay();
         updateJudgeStats();
-
-        // 播放音乐
         playMusic(song);
-
-        // 生成音符
         startSong();
     }
 
     function startSong() {
         const song = gameState.currentSong;
 
-        // 根据数据生成音符
         song.notes.forEach(noteData => {
             setTimeout(() => {
                 if (gameState.isPlaying) {
@@ -1366,13 +1285,11 @@
             }, noteData.time);
         });
 
-        // 计算游戏结束时间（应为最后一个音符的时间加上一些缓冲时间）
         let maxNoteTime = 0;
         if (song.notes && song.notes.length > 0) {
             maxNoteTime = Math.max(...song.notes.map(note => note.time));
         }
         
-        // 游戏结束时间应该是最后一个音符时间加上1秒缓冲时间
         const gameEndTime = Math.max(song.duration, maxNoteTime) + 1000;
 
         if (audioElement) {
@@ -1418,25 +1335,22 @@
         note.dataset.judged = 'false'; // 是否已被判定
         note.dataset.hit = 'false'; // 是否已被击中（用于长音符，弃用）
 
-        // 添加唯一ID
         const noteId = Date.now() + Math.random();
         note.dataset.id = noteId;
 
         // 设置长音符高度（不再使用）
         if (type === 'long') {
-            // 根据长度计算高度（简化处理）
+            // 根据长度计算高度
             const height = Math.max(3, (length || 500) / 1000 * 10); // 最小3%，每1000ms增加10%
             note.style.height = height + '%';
 
-            // 调整长音符的初始位置，使其底部与屏幕顶部对齐
+            // 调整长音符初始位置，使其底部与屏幕顶部对齐
             note.style.top = `-${height}%`;
         } else {
             note.style.height = '3%';
         }
 
-
         document.getElementById('notes_container').appendChild(note);
-
 
         const noteObj = {
             id: noteId,
@@ -1466,15 +1380,15 @@
             }, 800); // 与动画时间一致
         }
 
-        // 长音符结束时的处理
+        // 长音符结束
         if (type === 'long') {
             setTimeout(() => {
                 // 查找长音符
                 const index = gameState.notes.findIndex(n => n.id === noteId);
                 if (index !== -1 && !gameState.notes[index].judged) {
-                    // 长音符未被处理，检查是否正在被按住
+                    // 检查是否正在被按住
                     if (gameState.longNotes.has(noteId)) {
-                        // 正被按住，视为完成
+                        // 被按视为完成
                         gameState.longNotes.delete(noteId);
                         note.remove();
                         gameState.notes.splice(index, 1);
@@ -1492,12 +1406,10 @@
         }
     }
 
-    // 更新combo显示
     function updateComboDisplay() {
         comboDisplay.innerText = `COMBO: ${gameState.combo}`;
     }
 
-    // 更新判定统计显示
     function updateJudgeStats() {
         document.getElementById('a-perfect-count').textContent = gameState.judgeStats.aPerfect;
         document.getElementById('perfect-count').textContent = gameState.judgeStats.perfect;
@@ -1505,14 +1417,9 @@
         document.getElementById('good-count').textContent = gameState.judgeStats.good;
         document.getElementById('miss-count-stat').textContent = gameState.judgeStats.miss;
     }
-
-    // 显示判定文字
     function showJudgmentText(text, color = 'white') {
         if (!gameState.settings.showJudgmentText) return;
-
         const display = document.getElementById('judge-text-display');
-
-        // 清除之前可能存在的定时器
         if (display.timeoutId) {
             clearTimeout(display.timeoutId);
         }
@@ -1530,23 +1437,7 @@
         // 保存定时器ID
         display.timeoutId = timeoutId;
     }
-    // 显示判定文字特效（已弃用）
-    // function showJudgment(text, color = 'white') {
-    //     if (!gameState.settings.showJudgment) return;
 
-    //     const judgment = document.createElement('div');
-    //     judgment.className = 'judgment-text ' + text.toLowerCase().replace('-', '');
-    //     judgment.innerText = text;
-    //     judgment.style.color = color;
-    //     judgmentContainer.appendChild(judgment);
-
-
-    //     setTimeout(() => {
-    //         judgment.remove();
-    //     }, 500);
-    // }
-
-    // 按键反馈
     function showKeyHitEffect(track) {
         const effect = document.createElement('div');
         effect.className = 'key-hit-effect';
@@ -1659,7 +1550,7 @@
         gameState.lastHitTime = Date.now();
         updateComboDisplay();
         updateJudgeStats();
-        //showJudgment(level.text, level.color);弃用大字特效
+
     }
 
     // 判定等级
@@ -1690,7 +1581,6 @@
                 const noteCenter = note.element.getBoundingClientRect().top +
                     (note.element.getBoundingClientRect().height / 2);
                 const diff = Math.abs(noteCenter - judgeLineTop);
-
 
                 if (diff < JUDGE_LEVELS.MISS.range * 200 / 200) { 
                     inJudgeArea = true;
@@ -1750,14 +1640,12 @@
             if (!note.judged && (note.track === track ||
                 (note.type === 'bumper' &&
                     ((note.track === 1 && (track === 1 || track === 2)) || // bumper1 覆盖轨道1和2
-                        (note.track === 2 && (track === 2 || track === 3)) || // bumper2 覆盖2和3
+                        (note.track === 2 && (track === 2 || track === 3)) || 
                         (note.track === 3 && (track === 3 || track === 4)))))) { 
-                // 计算音符中心与判定线差值
                 const noteCenter = note.element.getBoundingClientRect().top +
                     (note.element.getBoundingClientRect().height / 2);
                 const diff = Math.abs(noteCenter - judgeLineTop);
 
-                // 计算时间差
                 const diffMs = (diff / window.innerHeight) * 800;
 
                 // 只考虑在判定范围内的音符，并选择最接近判定线的音符
@@ -1769,15 +1657,11 @@
             }
         });
 
-        // 如果找到可击中的音符
         if (hitNote) {
-            // 判定等级
             const judgment = judgeLevel(bestDiffMs);
-
-            // 标记已判定
             hitNote.judged = true;
 
-            // 对于长音符，标记为已击中但不立即移除（弃用）
+            // 对于长音符，标记为已击中但不移除（弃用）
             if (hitNote.type === 'long') {
                 hitNote.hit = true;
                 gameState.longNotes.set(hitNote.id, hitNote);
@@ -1799,8 +1683,7 @@
                 handleJudgment(judgment);
             }
         } else {
-            // 修改部分：只在当前轨道有音符在判定区域时才计入miss
-            // 检查当前轨道是否有音符在判定区域
+            // 只在当前轨道有音符在判定区域时才计入miss
             let hasNoteInTrack = false;
             gameState.notes.forEach(note => {
                 if (!note.judged && note.track === track) {
@@ -1808,29 +1691,25 @@
                         (note.element.getBoundingClientRect().height / 2);
                     const diff = Math.abs(noteCenter - judgeLineTop);
                     
-                    // 使用更精确的判定范围计算
                     if (diff <= JUDGE_LEVELS.MISS.range * (window.innerHeight / 200)) {
                         hasNoteInTrack = true;
                     }
                 }
             });
             
-            // 只有当当前轨道有音符在判定区域时才计入miss
             if (hasNoteInTrack) {
                 handleJudgment('MISS');
             }
         }
     });
 
-    // 键盘释放事件
+    // 键盘释放
     document.addEventListener('keyup', function (event) {
         const player_key = event.keyCode;
 
         gameState.activeKeys.delete(player_key);
 
-        // 如果是长音符，检查是否成功完成
         if (gameState.isPlaying) {
-            // 查找释放的键对应的轨道
             let track = 0;
             switch (player_key) {
                 case 68: // D 
@@ -1863,7 +1742,6 @@
 
                     const judgment = judgeLevel(diffMs);
 
-                    // 使用一致的判定范围计算
                     if (diff <= JUDGE_LEVELS.MISS.range * (window.innerHeight / 200)) {
 
                         note.element.remove();
@@ -1890,14 +1768,10 @@
         }
     });
 
-    // 结束游戏
     function endGame() {
         gameState.isPlaying = false;
-
-        // 隐藏游戏界面
         gameContainer.style.display = 'none';
 
-        // 显示成绩界面
         document.getElementById('final-score').innerText = gameState.score;
         document.getElementById('max-combo').innerText = gameState.maxCombo;
         document.getElementById('result-a-perfect').innerText = gameState.judgeStats.aPerfect;
@@ -1907,9 +1781,6 @@
         document.getElementById('result-miss').innerText = gameState.judgeStats.miss;
         resultScreen.style.display = 'flex';
 
-
-
-        // 清理音符
         document.getElementById('notes_container').innerHTML = '';
     }
 </script>
